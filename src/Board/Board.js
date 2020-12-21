@@ -96,29 +96,38 @@ class Board extends Component {
   /** Render game board or winning message. */
 
   render() {
-    let board;
-
     if (this.state.hasWon) {
-      return 'You win!!!';
+      return (
+        <div>
+          <span className="neon">You</span>
+          <span className="flux">Win!</span>
+        </div>
+      );
     }
 
     return (
-      <table className="Board">
-        <tbody>
-          {this.state.board.map((col, colIndex) => (
-            <tr key={colIndex}>
-              {col.map(cell => (
-                <Cell
-                  key={cell.coord}
-                  coord={cell.coord}
-                  isLit={cell.isLit}
-                  flipCellsAroundMe={this.flipCellsAround}
-                />
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div>
+        <div>
+          <span className="neon neon-flux">Lights</span>
+          <span className="flux neon-flux">Out</span>
+        </div>
+        <table className="Board">
+          <tbody>
+            {this.state.board.map((col, colIndex) => (
+              <tr key={colIndex}>
+                {col.map(cell => (
+                  <Cell
+                    key={cell.coord}
+                    coord={cell.coord}
+                    isLit={cell.isLit}
+                    flipCellsAroundMe={this.flipCellsAround}
+                  />
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
     // if the game is won, just show a winning msg & render nothing else
     // TODO
