@@ -1,7 +1,6 @@
 .Board {
   display: grid;
   grid-template-columns: 100px 100px 100px 100px 100px;
-  gap: 1px;
   width: 500px;
   margin: auto;
 }
