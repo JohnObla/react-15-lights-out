@@ -33,12 +33,13 @@ class Board extends Component {
     super(props);
     this.state = { hasWon: false, board: this.createBoard() };
     this.createBoard = this.createBoard.bind(this);
+    this.flipCellsAround = this.flipCellsAround.bind(this);
   }
 
   static defaultProps = {
     nrows: 5,
     ncols: 5,
-    chanceLightStartsOn: 0.5,
+    chanceLightStartsOn: 0.3,
   };
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -75,17 +76,23 @@ class Board extends Component {
   /** handle changing a cell: update board & determine if winner */
 
   flipCellsAround(coord) {
-    let { ncols, nrows } = this.props;
-    let board = this.state.board;
-    let [y, x] = coord.split('-').map(Number);
+    const { ncols, nrows } = this.props;
+    const board = [...this.state.board];
+    const [y, x] = coord.split('-').map(Number);
 
     function flipCell(y, x) {
       // if this coord is actually on board, flip it
 
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
-        board[y][x] = !board[y][x];
+        board[y][x].isLit = !board[y][x].isLit;
       }
     }
+
+    flipCell(y, x);
+    flipCell(y + 1, x);
+    flipCell(y - 1, x);
+    flipCell(y, x + 1);
+    flipCell(y, x - 1);
 
     // TODO: flip this cell and the cells around it
 
@@ -109,7 +116,7 @@ class Board extends Component {
                   key={cell.coord}
                   coord={cell.coord}
                   isLit={cell.isLit}
-                  flipCellsAroundMe={''}
+                  flipCellsAroundMe={this.flipCellsAround}
                 />
               ))}
             </tr>
