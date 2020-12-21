@@ -46,13 +46,6 @@ class Board extends Component {
 
   createBoard() {
     const { nrows, ncols, chanceLightStartsOn } = this.props;
-    // const board = [];
-
-    // for (let i = 0; i < ncols; i++) {
-    //   for (let j = 0; j < nrows; j++) {
-    //     board[i][j] = Math.floor(Math.random()) < chanceLightStartsOn;
-    //   }
-    // }
 
     const board = Array.from({ length: ncols }).fill({
       coord: null,
@@ -67,8 +60,6 @@ class Board extends Component {
         };
       });
     });
-
-    // TODO: create array-of-arrays of true/false values
 
     return filledBoard;
   }
@@ -93,8 +84,6 @@ class Board extends Component {
     flipCell(y - 1, x);
     flipCell(y, x + 1);
     flipCell(y, x - 1);
-
-    // TODO: flip this cell and the cells around it
 
     // win when every cell is turned off
     // TODO: determine is the game has been won
@@ -125,8 +114,6 @@ class Board extends Component {
       </table>
     );
     // if the game is won, just show a winning msg & render nothing else
-    // TODO
-    // make table board
     // TODO
   }
 }
