@@ -88,13 +88,20 @@ class Board extends Component {
     // win when every cell is turned off
     // TODO: determine is the game has been won
 
-    const hasWon = false;
+    const hasWon = board.every(col => col.every(cell => !cell.isLit));
+
     this.setState({ board, hasWon });
   }
 
   /** Render game board or winning message. */
 
   render() {
+    let board;
+
+    if (this.state.hasWon) {
+      return 'You win!!!';
+    }
+
     return (
       <table className="Board">
         <tbody>
