@@ -1,3 +1,5 @@
 .Board {
   margin: auto;
+  /* box-shadow: -10px 5px 20px rgb(255, 0, 200), 5px 2.5px 20px white; */
+  box-shadow: 0 0 25px white, -10px 5px 25px purple;
 }
