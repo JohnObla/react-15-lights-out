@@ -32,7 +32,6 @@ class Board extends Component {
   constructor(props) {
     super(props);
     this.state = { hasWon: false, board: this.createBoard() };
-
     this.createBoard = this.createBoard.bind(this);
   }
 
@@ -54,15 +53,22 @@ class Board extends Component {
     //   }
     // }
 
-    const board = Array.from({ length: ncols }).fill(
-      Array.from({ length: nrows })
-    );
+    const board = Array.from({ length: ncols }).fill({
+      coord: null,
+      isLit: Array.from({ length: nrows }),
+    });
 
-    const filledBoard = board.map(col =>
-      col.map(row => Math.random() < chanceLightStartsOn)
-    );
+    const filledBoard = board.map((col, colIndex) => {
+      return col.isLit.map((row, rowIndex) => {
+        return {
+          coord: `${colIndex}-${rowIndex}`,
+          isLit: Math.random() < chanceLightStartsOn,
+        };
+      });
+    });
 
     // TODO: create array-of-arrays of true/false values
+
     return filledBoard;
   }
 
@@ -94,9 +100,22 @@ class Board extends Component {
 
   render() {
     return (
-      <div className="Board">
-        {this.state.board.map(col => col.map(isLit => <Cell isLit={isLit} />))}
-      </div>
+      <table className="Board">
+        <tbody>
+          {this.state.board.map((col, colIndex) => (
+            <tr key={colIndex}>
+              {col.map(cell => (
+                <Cell
+                  key={cell.coord}
+                  coord={cell.coord}
+                  isLit={cell.isLit}
+                  flipCellsAroundMe={''}
+                />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
     // if the game is won, just show a winning msg & render nothing else
     // TODO
