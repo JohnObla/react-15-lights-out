@@ -94,7 +94,7 @@ class Board extends Component {
 
   render() {
     return (
-      <div>
+      <div className="Board">
         {this.state.board.map(col => col.map(isLit => <Cell isLit={isLit} />))}
       </div>
     );
