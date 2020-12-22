@@ -47,21 +47,17 @@ class Board extends Component {
   createBoard() {
     const { nrows, ncols, chanceLightStartsOn } = this.props;
 
-    const board = Array.from({ length: ncols }).fill({
-      coord: null,
-      isLit: Array.from({ length: nrows }),
-    });
+    const board = [];
 
-    const filledBoard = board.map((col, colIndex) => {
-      return col.isLit.map((row, rowIndex) => {
-        return {
-          coord: `${colIndex}-${rowIndex}`,
-          isLit: Math.random() < chanceLightStartsOn,
-        };
-      });
-    });
+    for (let y = 0; y < nrows; y++) {
+      const row = [];
+      for (let x = 0; x < ncols; x++) {
+        row.push(Math.random() < chanceLightStartsOn);
+      }
+      board.push(row);
+    }
 
-    return filledBoard;
+    return board;
   }
 
   /** handle changing a cell: update board & determine if winner */
@@ -75,7 +71,7 @@ class Board extends Component {
       // if this coord is actually on board, flip it
 
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
-        board[y][x].isLit = !board[y][x].isLit;
+        board[y][x] = !board[y][x];
       }
     }
 
@@ -86,9 +82,7 @@ class Board extends Component {
     flipCell(y, x - 1);
 
     // win when every cell is turned off
-    // TODO: determine is the game has been won
-
-    const hasWon = board.every(col => col.every(cell => !cell.isLit));
+    const hasWon = board.every(row => row.every(isLit => !isLit));
 
     this.setState({ board, hasWon });
   }
@@ -105,6 +99,22 @@ class Board extends Component {
       );
     }
 
+    const tblBoard = [];
+    for (let y = 0; y < this.props.nrows; y++) {
+      const row = [];
+      for (let x = 0; x < this.props.ncols; x++) {
+        row.push(
+          <Cell
+            key={`${y}-${x}`}
+            coord={`${y}-${x}`}
+            isLit={this.state.board[y][x]}
+            flipCellsAroundMe={this.flipCellsAround}
+          />
+        );
+      }
+      tblBoard.push(<tr>{row}</tr>);
+    }
+
     return (
       <div>
         <div>
@@ -112,25 +122,11 @@ class Board extends Component {
           <span className="flux neon-flux">Out</span>
         </div>
         <table className="Board">
-          <tbody>
-            {this.state.board.map((col, colIndex) => (
-              <tr key={colIndex}>
-                {col.map(cell => (
-                  <Cell
-                    key={cell.coord}
-                    coord={cell.coord}
-                    isLit={cell.isLit}
-                    flipCellsAroundMe={this.flipCellsAround}
-                  />
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          <tbody>{tblBoard}</tbody>
         </table>
       </div>
     );
     // if the game is won, just show a winning msg & render nothing else
-    // TODO
   }
 }
 
